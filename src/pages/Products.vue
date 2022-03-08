@@ -3,11 +3,13 @@
 
     <div class="col-lg-3">
 
-      <h1 class="my-4 title-tenant">Nome do Tenant</h1>
+      <h1 class="my-4 title-tenant">{{ company.name }}</h1>
       <div class="list-group">
-        <a href="#" class="list-group-item active">Categoria 1</a>
-        <a href="#" class="list-group-item">Categoria 2</a>
-        <a href="#" class="list-group-item">Categoria 3</a>
+        <a href="#"
+          class="list-group-item"
+          v-for="(category, index) in categories.data" :key="index">
+          {{ categories.name }}
+        </a>
       </div>
 
     </div>
@@ -19,7 +21,7 @@
 
         <div class="col-lg-4 col-md-6 mb-4">
           <div class="card h-100">
-            <a href="#"><img class="card-img-top" src="imgs/pizza.png" alt=""></a>
+            <a href="#"><img class="card-img-top" src="@/assets/imgs/pizza.png" alt=""></a>
             <div class="card-body">
               <h4 class="card-title">
                 <a href="#">Pizza</a>
@@ -37,7 +39,7 @@
 
         <div class="col-lg-4 col-md-6 mb-4">
           <div class="disabled card h-100">
-            <a href="#"><img class="card-img-top" src="imgs/acai.png" alt=""></a>
+            <a href="#"><img class="card-img-top" src="@/assets/imgs/acai.png" alt=""></a>
             <div class="card-body">
               <h4 class="card-title">
                 <a href="#">AÃ§ai na Tijela</a>
@@ -53,7 +55,7 @@
 
         <div class="col-lg-4 col-md-6 mb-4">
           <div class="card h-100">
-            <a href="#"><img class="card-img-top" src="imgs/japonesa.png" alt=""></a>
+            <a href="#"><img class="card-img-top" src="@/assets/imgs/japonesa.png" alt=""></a>
             <div class="card-body">
               <h4 class="card-title">
                 <a href="#">Item Three</a>
@@ -69,7 +71,7 @@
 
         <div class="col-lg-4 col-md-6 mb-4">
           <div class="card h-100">
-            <a href="#"><img class="card-img-top" src="imgs/lanches.png" alt=""></a>
+            <a href="#"><img class="card-img-top" src="@/assets/imgs/lanches.png" alt=""></a>
             <div class="card-body">
               <h4 class="card-title">
                 <a href="#">SanduÃ­che</a>
@@ -85,7 +87,7 @@
 
         <div class="col-lg-4 col-md-6 mb-4">
           <div class="card h-100">
-            <a href="#"><img class="card-img-top" src="imgs/pizza.png" alt=""></a>
+            <a href="#"><img class="card-img-top" src="@/assets/imgs/pizza.png" alt=""></a>
             <div class="card-body">
               <h4 class="card-title">
                 <a href="#">Pizza Vegana</a>
@@ -101,7 +103,7 @@
 
         <div class="col-lg-4 col-md-6 mb-4">
           <div class="card h-100">
-            <a href="#"><img class="card-img-top" src="imgs/acai.png" alt=""></a>
+            <a href="#"><img class="card-img-top" src="@/assets/imgs/acai.png" alt=""></a>
             <div class="card-body">
               <h4 class="card-title">
                 <a href="#">AÃ§ai Bomba</a>
@@ -124,3 +126,37 @@
   </div>
   <!-- /.row -->
 </template>
+
+<script>
+import  { mapState } from 'vuex'
+
+export default {
+  props: ['companyFlag'],
+
+  created() {
+    if (this.company.name === '') {
+      return this.$router.push({name: 'home'})
+    }
+  },
+
+  computed: {
+    ...mapState({
+      company: state => state.companies.companySelected,
+    }),
+  },
+
+
+    /*
+        this.getCategoriesByCompany(this.company.uuid)
+            .catch(response => this.$vToastify.error('Falha ao Carregar as Categorias', 'Erro'))
+      },
+
+
+      methods: {
+        ...mapActions([
+            'getCategoriesByCompany'
+        ])
+      }
+      */
+}
+</script>
