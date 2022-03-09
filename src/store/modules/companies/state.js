@@ -4,7 +4,8 @@ const state = {
     },
 
     companySelected: {
-        name: ''
+        name: '',
+        products: []
     },
 
     categoriesCompanySelected: {
