@@ -15,22 +15,27 @@
             <div class="input-group-append">
               <span class="input-group-text"><i class="fas fa-user"></i></span>
             </div>
-            <input type="text" name="" class="form-control input_user" value="" placeholder="Nome">
+            <input type="text" v-model="formData.name" name="" class="form-control input_user" value="" placeholder="Nome">
           </div>
           <div class="input-group mb-3">
             <div class="input-group-append">
               <span class="input-group-text"><i class="fas fa-envelope"></i></span>
             </div>
-            <input type="text" name="" class="form-control input_user" value="" placeholder="E-mail">
+            <input type="email" v-model="formData.email" name="email" class="form-control input_user" value="" placeholder="E-mail">
           </div>
           <div class="input-group mb-2">
             <div class="input-group-append">
               <span class="input-group-text"><i class="fas fa-key"></i></span>
             </div>
-            <input type="password" name="" class="form-control input_pass" value="" placeholder="Senha">
+            <input type="password" v-model="formData.password" name="password" class="form-control input_pass" value="" placeholder="Senha">
           </div>
           <div class="d-flex justify-content-center mt-3 login_container">
-            <button type="button" name="button" class="btn login_btn">Cadastrar</button>
+            <button type="button" name="button" class="btn login_btn"
+              :disabled="loading"
+              @click.prevent="registerClient">
+              <span v-if="loading">Cadastrando...</span>
+              <span v-else>Cadastrar</span>
+            </button>
           </div>
         </form>
       </div>
@@ -45,3 +50,36 @@
   </div>
   <!-- login-->
 </template>
+
+<script>
+  import { mapActions } from 'vuex'
+
+  export default {
+    data() {
+      return {
+        loading: false,
+        formData: {
+          name: '',
+          email: '',
+          password: '',
+        }
+      }
+    },
+    methods: {
+      ...mapActions([
+        'register'
+      ]),
+
+      registerClient () {
+        this.loading = true
+
+        this.register(this.formData)
+          .then(response => {
+            console.log(response)
+          })
+          .catch(error => this.$vToastify.error('Falha ao Registrar', 'Erro'))
+          .finally(() => this.loading = false)
+      }
+    }
+  }
+</script>
