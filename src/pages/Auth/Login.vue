@@ -10,21 +10,31 @@
         </div>
       </div>
       <div class="d-flex justify-content-center form_container">
-        <form>
+        <form @submit.prevent="auth">
+          <div class="text-danger" v-if="errors.email != ''">
+            {{ errors.email[0] || '' }}
+          </div>
           <div class="input-group mb-3">
             <div class="input-group-append">
               <span class="input-group-text"><i class="fas fa-envelope"></i></span>
             </div>
-            <input type="text" name="" class="form-control input_user" value="" placeholder="E-mail">
+            <input type="email" v-model="formData.email" name="email" :class="['form-control', 'input_user', {'is-invalid': errors.email != ''}]" placeholder="E-mail">
+          </div>
+          <div class="text-danger" v-if="errors.password != ''">
+            {{ errors.password[0] || '' }}
           </div>
           <div class="input-group mb-2">
             <div class="input-group-append">
               <span class="input-group-text"><i class="fas fa-key"></i></span>
             </div>
-            <input type="password" name="" class="form-control input_pass" value="" placeholder="Senha">
+            <input type="password" v-model="formData.password" name="password" :class="['form-control', 'input_pass', {'is-invalid': errors.email != ''}]" placeholder="Senha">
           </div>
           <div class="d-flex justify-content-center mt-3 login_container">
-            <button type="button" name="button" class="btn login_btn">Entrar</button>
+            <button type="submit" name="button" class="btn login_btn"
+                    :disabled="loading">
+              <span v-if="loading">Entrando...</span>
+              <span v-else>Entrar</span>
+            </button>
           </div>
         </form>
       </div>
@@ -39,3 +49,78 @@
   </div>
   <!-- login-->
 </template>
+
+<script>
+import { mapActions } from 'vuex'
+
+export default {
+
+  computed: {
+    deviceName () {
+      return navigator.appCodeName + navigator.appName + navigator.platform + this.formData.email
+    }
+  },
+
+  data() {
+    return {
+      loading: false,
+
+      formData: {
+        email: '',
+        password: '',
+      },
+
+      errors: {
+        email: '',
+        password: '',
+      }
+    }
+  },
+  methods: {
+    ...mapActions([
+      'login'
+    ]),
+
+    auth () {
+      this.reset()
+      this.loading = true
+
+      const params = {
+        device_name: this.deviceName,
+        ...this.formData
+      }
+
+      this.login(params)
+          .then(response => {
+            this.$vToastify.success('Autenticação realizada com sucesso', 'Parabéns')
+
+            alert('ok')
+          })
+          .catch(error => {
+            const errorResponse = error.response
+
+            if (errorResponse.status === 422) {
+              this.errors = Object.assign(this.errors, errorResponse.data.errors)
+
+              this.$vToastify.error('Dados Inválidos, verifique novamente', 'Error')
+
+              setTimeout(() => this.reset(), 4000)
+
+              return;
+            }
+
+            this.$vToastify.error('Falha ao Registrar', 'Erro')
+
+          })
+          .finally(() => this.loading = false)
+    },
+
+    reset () {
+      this.errors = {
+        email: '',
+        password: '',
+      }
+    }
+  },
+}
+</script>

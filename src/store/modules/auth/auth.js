@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { TOKEN_NAME} from "@/configs/api"
 
 export default {
 
@@ -33,8 +34,16 @@ export default {
 
     actions: {
         register ({ commit }, params) {
-            console.log(params);
             return axios.post('auth/register', params)
+        },
+
+        login ({ commit }, params) {
+            return axios.post('auth/token', params)
+                .then(response => {
+                    const token = response.data.token
+
+                    localStorage.setItem(TOKEN_NAME, token)
+                })
         }
     }
 }
