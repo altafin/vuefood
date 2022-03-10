@@ -13,8 +13,9 @@
                 <i class="fas fa-shopping-cart"></i> ({{ productsCart.length }})
               </router-link>
             </li>
-            <li class="nav-item active">
-              <router-link :to="{name: 'login'}" class="nav-link">Entrar</router-link>
+            <li class="nav-item">
+              <a href="#" v-if="me.name" class="nav-link">Olá {{ me.name }}</a>
+              <router-link v-else :to="{name: 'login'}" class="nav-link">Entrar</router-link>
             </li>
           </ul>
         </div>
@@ -29,7 +30,8 @@ import { mapState } from 'vuex'
 export default {
   computed: {
     ...mapState({
-      productsCart: state => state.cart.products
+      productsCart: state => state.cart.products,
+      me: state => state.auth.me
     })
   }
 }

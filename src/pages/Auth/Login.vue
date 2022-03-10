@@ -94,7 +94,7 @@ export default {
           .then(response => {
             this.$vToastify.success('Autenticação realizada com sucesso', 'Parabéns')
 
-            alert('ok')
+            this.$router.push({name: 'home'})
           })
           .catch(error => {
             const errorResponse = error.response
