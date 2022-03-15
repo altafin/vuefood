@@ -52,7 +52,7 @@
     <hr>
     <button
       class="btn btn-success"
-      @v-if="me.name != '' && me.name === order.client.name"
+      v-if="me.name != '' && me.name === order.client.name && order.evaluations.length === 0"
       @click.prevent="openModalEvaluation">
       Avaliar o pedido
     </button>
@@ -63,17 +63,17 @@
 
         <strong>Nota:</strong>
         <vue-stars
-            name="evaluation"
-            :active-color="'#ffdd00'"
-            :inactive-color="'#999999'"
-            :shadow-color="'#ffff00'"
-            :hover-color="'#dddd00'"
-            :max="5"
-            :readonly="false"
-            :char="'★'"
-            :inactive-char="''"
-            :class="''"
-            v-model="evaluation.stars"
+          name="evaluation"
+          :active-color="'#ffdd00'"
+          :inactive-color="'#999999'"
+          :shadow-color="'#ffff00'"
+          :hover-color="'#dddd00'"
+          :max="5"
+          :readonly="false"
+          :char="'★'"
+          :inactive-char="''"
+          :class="''"
+          v-model="evaluation.stars"
         />
 
         <div class="form-group">
@@ -88,6 +88,28 @@
         </button>
       </div>
     </modal>
+
+    <div class="evaluations-order col-12" v-if="order.evaluations.length">
+      <div v-for="(evaluation, index) in order.evaluations" :key="index">
+        <p><strong>Nome:</strong> {{ evaluation.client.name }}</p>
+        <p><strong>Comentário:</strong> {{ evaluation.comment }}</p>
+        <p><strong>Nota:</strong>
+          <vue-stars
+            name="evaluation-user"
+            :active-color="'#ffdd00'"
+            :inactive-color="'#999999'"
+            :shadow-color="'#ffff00'"
+            :hover-color="'#dddd00'"
+            :max="5"
+            :readonly="true"
+            :char="'★'"
+            :inactive-char="''"
+            :class="''"
+            :value="evaluation.stars"
+          />
+        </p>
+      </div>
+    </div>
     <!-- Evaluations -->
 
   </div>
