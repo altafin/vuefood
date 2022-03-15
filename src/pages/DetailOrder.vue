@@ -60,10 +60,32 @@
     <modal name="evaluation-order" :heigth="350">
       <div class="px-md-5 my-4">
         <h1>Avaliar o pedido {{ identify }}</h1>
+
+        <strong>Nota:</strong>
+        <vue-stars
+            name="evaluation"
+            :active-color="'#ffdd00'"
+            :inactive-color="'#999999'"
+            :shadow-color="'#ffff00'"
+            :hover-color="'#dddd00'"
+            :max="5"
+            :readonly="false"
+            :char="'★'"
+            :inactive-char="''"
+            :class="''"
+            v-model="evaluation.stars"
+        />
+
         <div class="form-group">
-          <textarea class="form-control" name="comment" cols="30" rows="3" placeholder="Comentário (Opcional)"></textarea>
+          <textarea v-model="evaluation.comment" class="form-control" name="comment" cols="30" rows="3" placeholder="Comentário (Opcional)"></textarea>
         </div>
-        <button class="btn bg-info">Avaliar</button>
+        <button
+          class="btn bg-info"
+          @click.prevent="sendEvaluation"
+          :disabled="loadSendEvaluation">
+          <span v-if="loadSendEvaluation">Enviando...</span>
+          <span v-else>Avaliar</span>
+        </button>
       </div>
     </modal>
     <!-- Evaluations -->
@@ -114,13 +136,19 @@ export default {
         },
         products: [],
         evaluations: [],
-      }
+      },
+      evaluation: {
+        stars: 1,
+        comment: ''
+      },
+      loadSendEvaluation: false,
     }
   },
 
   methods: {
     ...mapActions([
-        'getOrderByIdentify'
+        'getOrderByIdentify',
+        'evaluationOrder',
     ]),
 
     openModalEvaluation () {
@@ -130,6 +158,22 @@ export default {
     closeModalEvaluation () {
       this.$modal.hide('evaluation-order')
     },
+
+    sendEvaluation () {
+      this.loadSendEvaluation = true
+      const params = {
+        identify: this.identify,
+        ...this.evaluation
+      }
+      this.evaluationOrder(params)
+        .then(response => {
+          this.$vToastify.success('Avaliação enviada com sucesso', 'Parabéns')
+          this.order.evaluations.push(response.data.data)
+          this.closeModalEvaluation()
+        })
+        .catch(error => this.$vToastify.error('Falha enviar avaliação', 'Erro'))
+        .finally(() => this.loadSendEvaluation = false)
+    }
   },
 }
 </script>
