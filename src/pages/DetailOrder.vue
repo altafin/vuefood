@@ -16,7 +16,7 @@
             Mesa:
             <ul>
               <li>Identificador: {{ order.table.identify }}</li>
-              <li>DescriÃ§Ã£o: {{ order.table.description }}</li>
+              <li>Descrição: {{ order.table.description }}</li>
             </ul>
           </li>
           <li>
@@ -49,14 +49,39 @@
     </div>
     <!-- products order -->
 
+    <hr>
+    <button
+      class="btn btn-success"
+      @v-if="me.name != '' && me.name === order.client.name"
+      @click.prevent="openModalEvaluation">
+      Avaliar o pedido
+    </button>
+
+    <modal name="evaluation-order" :heigth="350">
+      <div class="px-md-5 my-4">
+        <h1>Avaliar o pedido {{ identify }}</h1>
+        <div class="form-group">
+          <textarea class="form-control" name="comment" cols="30" rows="3" placeholder="Comentário (Opcional)"></textarea>
+        </div>
+        <button class="btn bg-info">Avaliar</button>
+      </div>
+    </modal>
+    <!-- Evaluations -->
+
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 export default {
   props: ['identify'],
+
+  computed: {
+    ...mapState({
+      me: state => state.auth.me
+    }),
+  },
 
   created() {
     this.getOrderByIdentify(this.identify)
@@ -96,7 +121,15 @@ export default {
   methods: {
     ...mapActions([
         'getOrderByIdentify'
-    ])
+    ]),
+
+    openModalEvaluation () {
+      this.$modal.show('evaluation-order')
+    },
+
+    closeModalEvaluation () {
+      this.$modal.hide('evaluation-order')
+    },
   },
 }
 </script>
