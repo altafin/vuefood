@@ -11,18 +11,18 @@
           <p><strong>Total de produtos:</strong> {{ products.length }}</p>
           <p><strong>Preço total:</strong> R$ {{ totalCart }}</p>
           <div class="form-group">
-            <textarea name="comment" class="form-control" cols="30" rows="2" placeholder="Comentário"></textarea>
+            <textarea name="comment" v-model="comment" class="form-control" cols="30" rows="2" placeholder="Comentário"></textarea>
           </div>
-          <button class="btn btn-success btn-full">Fazer Pedido</button>
+          <button class="btn btn-success btn-full" @click.prevent="createOrder">Fazer Pedido</button>
         </div>
         <div v-else class="row">
           <div class="col-6">
             <p><strong>Total de produtos:</strong> {{ products.length }}</p>
             <p><strong>Preço total:</strong> R$ {{ totalCart }}</p>
             <div class="form-group">
-              <textarea name="comment" class="form-control" cols="30" rows="2" placeholder="Comentário"></textarea>
+              <textarea name="comment" v-model="comment" class="form-control" cols="30" rows="2" placeholder="Comentário"></textarea>
             </div>
-            <button class="btn btn-info btn-full">Fazer Pedido de Forma Anônima</button>
+            <button class="btn btn-info btn-full" @click.prevent="createOrder">Fazer Pedido de Forma Anônima</button>
           </div>
           <div class="col-6">
             <router-link :to="{name: 'login'}" class="btn btn-light btn-full">
@@ -35,13 +35,14 @@
   </div>
 </template>
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   computed: {
     ...mapState({
       products: state => state.cart.products,
-      me: state => state.auth.me
+      me: state => state.auth.me,
+      company: state => state.companies.companySelected,
     }),
 
     totalCart () {
@@ -55,7 +56,45 @@ export default {
     }
   },
 
+  data () {
+    return {
+      comment: '',
+    }
+  },
+
   methods: {
+    ...mapActions([
+        'createOrder',
+        'createOrderAuthenticated',
+    ]),
+
+    createOrder () {
+      const action = this.me.name === '' ? 'createOrder' : 'createOrderAuthenticated'
+
+      let params = {
+        token_company: this.company.uuid,
+        comment: this.comment,
+        products: [
+            ...this.products
+        ],
+      }
+
+      this.$store.dispatch(action, params)
+        .then(order => {
+          this.$vToastify.success('Pedido realizado com sucesso', 'Parabéns')
+
+          this.$router.push({
+            name: 'order.detail',
+            params: {
+              identify: order.identify,
+            }
+          })
+        })
+        .catch(error => {
+          this.$vToastify.error('Falha ao realizar o pedido', 'Falha')
+        })
+    },
+
     openModalCheckout() {
       this.$modal.show('checkout')
     },
