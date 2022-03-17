@@ -46,41 +46,33 @@
       <!-- END PRODUCT -->
     </div>
     <div class="card-footer card-footer-custom">
-      <div class=" text-light" style="margin: 5px">
-        Preço Total: <b>R$ {{ totalCart }}</b>
-      </div>
-      <a href="" class="btn btn-success ">Finalizar</a>
+      <checkout/>
     </div>
   </div>
   <!-- cart-->
 </template>
 
 <script>
-  import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
+import Checkout from './_partials/Checkout';
 
-  export default {
-    computed: {
-      ...mapState({
-        products: state => state.cart.products
-      }),
+export default {
+  computed: {
+    ...mapState({
+      products: state => state.cart.products
+    }),
+  },
 
-      totalCart () {
-        let total = 0
+  methods: {
+    ...mapMutations({
+      removeCart: 'REMOVE_PROD_CART',
+      incrementQty: 'INCREMENT_QTY_PROD_CART',
+      decrementQty: 'DECREMENT_QTY_PROD_CART',
+    })
+  },
 
-        this.products.map((itemCart, index) =>{
-          total += itemCart.qty * itemCart.product.price
-        })
-
-        return total
-      }
-    },
-
-    methods: {
-      ...mapMutations({
-        removeCart: 'REMOVE_PROD_CART',
-        incrementQty: 'INCREMENT_QTY_PROD_CART',
-        decrementQty: 'DECREMENT_QTY_PROD_CART',
-      })
-    },
-  }
+  components: {
+    Checkout
+  },
+}
 </script>
