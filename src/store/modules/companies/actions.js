@@ -45,7 +45,7 @@ export default {
         commit('SET_PRELOADER', true)
         commit('SET_TEXT_PRELOADER', 'Carregando a mesa')
 
-        return axios.get(`${API_VERSION}/tables/${params.table}`, params)
+        return axios.get(`${API_VERSION}/tables/${params.table}`, { params })
             .then(response => commit('SET_TABLE_COMPANY', response.data.data))
             .finally(() => commit('SET_PRELOADER', false))
     },
