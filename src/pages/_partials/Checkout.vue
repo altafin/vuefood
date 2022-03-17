@@ -6,7 +6,10 @@
     <a href="" class="btn btn-success" @click.prevent="openModalCheckout">Finalizar</a>
 
     <modal name="checkout">
-      <div class="px-md-5 my-4">
+      <div class="px-md-5 my-4" v-if="loading">
+        <p>Gerando o pedido... (aguarde!)</p>
+      </div>
+      <div class="px-md-5 my-4" v-else>
         <div class="col-12" v-if="me.name !== ''">
           <p><strong>Total de produtos:</strong> {{ products.length }}</p>
           <p><strong>Preço total:</strong> R$ {{ totalCart }}</p>
@@ -59,6 +62,7 @@ export default {
   data () {
     return {
       comment: '',
+      loading: false,
     }
   },
 
@@ -69,6 +73,7 @@ export default {
     ]),
 
     createOrder () {
+      this.loading = true
       const action = this.me.name === '' ? 'createOrder' : 'createOrderAuthenticated'
 
       let params = {
@@ -93,6 +98,7 @@ export default {
         .catch(error => {
           this.$vToastify.error('Falha ao realizar o pedido', 'Falha')
         })
+        .finally(() => this.loading = false)
     },
 
     openModalCheckout() {
