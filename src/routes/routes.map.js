@@ -6,6 +6,7 @@ import Login from '@/pages/Auth/Login';
 import Register from '@/pages/Auth/Register';
 import MyOrders from '@/pages/Auth/MyOrders';
 import DetailOrder from '@/pages/DetailOrder';
+import LoadTableCompany from '@/pages/LoadTableCompany';
 
 const routes = [
     {
@@ -13,24 +14,35 @@ const routes = [
         component: () => import('@/layouts/DefaultTemplate'),
         children:[
             {
+                path: '/:token_company/:token_table',
+                component: LoadTableCompany,
+                name: 'load.table.company',
+                props: true
+
+            },
+
+            {
                 path: '/pedido/:identify',
                 component: DetailOrder,
                 name: 'order.detail',
                 props: true
 
             },
+
             {
                 path: '/meus-pedidos',
                 component: MyOrders,
                 name: 'my.orders'
 
             },
+
             {
                 path: '/carrinho',
                 component: Cart,
                 name: 'cart'
 
             },
+
             {
                 path: '/loja/:companyFlag',
                 component: Products,
@@ -38,6 +50,7 @@ const routes = [
                 props: true
 
             },
+
             {
                 path: '/',
                 component: Home,
@@ -54,6 +67,7 @@ const routes = [
                 component: Login,
                 name: 'login'
             },
+
             {
                 path: '/cadastrar',
                 component: Register,

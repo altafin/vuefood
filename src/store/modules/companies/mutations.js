@@ -14,4 +14,8 @@ export default {
     SET_PRODUCTS_COMPANY (state, products) {
         state.companySelected.products = products
     },
+
+    SET_TABLE_COMPANY (state, table) {
+        state.companySelected.table = table
+    },
 }
