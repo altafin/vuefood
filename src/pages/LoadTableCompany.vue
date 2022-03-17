@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <p>Carregando dados, aguarde!</p>
+  <div class="my-4 text-center">
+    <h1 class="title-tenant">Carregando dados, aguarde!</h1>
   </div>
 </template>
 

@@ -11,6 +11,7 @@ const state = {
         table: {
             identify: '',
             description: '',
+            name: '',
         }
     },
 
