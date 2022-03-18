@@ -9,8 +9,8 @@
       <div class="col-sm-12">
         <ul>
           <li>Número: {{ order.identify }}</li>
-          <li>Total: R$ {{ order.total }}</li>
-          <li>Data: {{ order.date }}</li>
+          <li>Total: R$ {{ order.total | formatprice }}</li>
+          <li>Data: {{ order.date | dateformat }}</li>
           <li>Status: <span class="badge bg-success">{{ order.status }}</span></li>
           <li v-if="order.table.identify">
             Mesa:

@@ -11,7 +11,7 @@
         <div class="card">
           <div class="card-body">
             <h5 class="card-title">Pedido: <strong>{{ order.identify }}</strong></h5>
-            <p class="card-text">{{ order.date }}</p>
+            <p class="card-text">{{ order.date | dateformat }}</p>
             <router-link :to="{name: 'order.detail', params: {identify: order.identify}}" class="btn btn-danger">
               Detalhes
             </router-link>
