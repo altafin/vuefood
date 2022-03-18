@@ -25,36 +25,47 @@ const routes = [
                 path: '/pedido/:identify',
                 component: DetailOrder,
                 name: 'order.detail',
-                props: true
-
+                props: true,
+                meta: {
+                    title: 'Detalhe do pedido'
+                }
             },
 
             {
                 path: '/meus-pedidos',
                 component: MyOrders,
-                name: 'my.orders'
-
+                name: 'my.orders',
+                meta: {
+                    title: 'Meus Pedidos'
+                }
             },
 
             {
                 path: '/carrinho',
                 component: Cart,
-                name: 'cart'
-
+                name: 'cart',
+                meta: {
+                    title: 'Carrinho de Compras'
+                }
             },
 
             {
                 path: '/loja/:companyFlag',
                 component: Products,
                 name: 'products',
-                props: true
-
+                props: true,
+                meta: {
+                    title: 'Produtos'
+                }
             },
 
             {
                 path: '/',
                 component: Home,
-                name: 'home'
+                name: 'home',
+                meta: {
+                    title: 'Home VueFood'
+                }
             },
         ]
     },
@@ -65,13 +76,19 @@ const routes = [
             {
                 path: '/entrar',
                 component: Login,
-                name: 'login'
+                name: 'login',
+                meta: {
+                    title: 'Login - VueFood'
+                }
             },
 
             {
                 path: '/cadastrar',
                 component: Register,
-                name: 'register'
+                name: 'register',
+                meta: {
+                    title: 'Cadastrar-se VueFood'
+                }
             },
         ]
     }
