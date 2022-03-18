@@ -7,6 +7,7 @@ import Register from '@/pages/Auth/Register';
 import MyOrders from '@/pages/Auth/MyOrders';
 import DetailOrder from '@/pages/DetailOrder';
 import LoadTableCompany from '@/pages/LoadTableCompany';
+import PageNotFound from '@/pages/PageNotFound';
 
 const routes = [
     {
@@ -91,6 +92,13 @@ const routes = [
                 }
             },
         ]
+    },
+    {
+        path: '*',
+        component: PageNotFound,
+        meta: {
+            title: 'Página não encontrada'
+        }
     }
 ]
 
